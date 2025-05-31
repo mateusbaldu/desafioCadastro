@@ -1,12 +1,8 @@
 package services;
 
+import models.Endereco;
 import models.Pet;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.sql.SQLOutput;
 import java.util.Scanner;
 
 import static services.TxtReader.manipularFormulario;
@@ -28,15 +24,14 @@ public class Menu {
         switch (opcao) {
             case 1:
                 manipularFormulario();
-                Pet petInserido = chamarOpcaoUm();
-                TxtReader.salvarPet(petInserido);
+                chamarOpcaoUm();
                 break;
             case 2:
-
+                chamarOpcaoDois();
                 break;
         }
     }
-    public static Pet chamarOpcaoUm() {
+    public static void chamarOpcaoUm() {
         System.out.println("---CADASTRAR NOVO PET---");
         Pet pet = new Pet();
         Endereco endereco = new Endereco();
@@ -71,7 +66,27 @@ public class Menu {
         System.out.println("Raça: ");
         pet.setRaca(sc.nextLine());
 
-        return pet;
+        TxtReader.salvarPet(pet);
     }
 
+
+    public static void chamarOpcaoDois() {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("----PESQUISAR PET----");
+        System.out.println("Digite o tipo do pet (OBrigatorio): ");
+        System.out.print("Cachorro ou Gato - ");
+        String tipoPesquisa = sc.nextLine().toUpperCase();
+
+        System.out.println("Insira critérios e as " +
+                "informaçoes que serão utilizadas para buscar o pet: ");
+        System.out.println("Importante! Digite-os separados somente por um traço!" +
+                " exemplo: Nome-Luiz");
+        System.out.println("Caso não deseje adicionar mais nenhum critério, aperte Space+Enter");
+        System.out.print("Insira o primeiro critério: ");
+        String criterioPesquisaUm = sc.nextLine();
+        System.out.print("Insira o segundo critério: ");
+        String criterioPesquisaDois = sc.nextLine();
+
+        TxtReader.pesquisarPet(tipoPesquisa, criterioPesquisaUm, criterioPesquisaDois);
+    }
 }

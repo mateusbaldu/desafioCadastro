@@ -1,7 +1,5 @@
 package models;
 
-import services.Endereco;
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
