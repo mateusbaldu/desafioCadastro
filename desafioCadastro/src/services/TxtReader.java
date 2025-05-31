@@ -52,7 +52,7 @@ public class TxtReader {
         }
     }
 
-    public static void pesquisarPet(String tipoPesquisa, String criterioPesquisaUm,
+    public static void pesquisarPetPorCriterios(String tipoPesquisa, String criterioPesquisaUm,
                                     String criterioPesquisaDois) {
         File pastaPetsCadastrados = new File("petsCadastrados");
         File[] arquivosCadastro = pastaPetsCadastrados.listFiles();
@@ -174,6 +174,36 @@ public class TxtReader {
            } catch (Exception e) {
                e.printStackTrace();
            }
+        }
+    }
+
+    public static void listarTodosOsPets() {
+        File pastaPetsCadastrados = new File("petsCadastrados");
+        File[] files = pastaPetsCadastrados.listFiles();
+        String[] arrayAuxiliar = new String[7];
+        String auxiliarUm = "";
+        String auxiliarDois = "";
+        if (files == null) {
+            System.out.println("Não existe nenhum pet cadastrado.");
+            return;
+        }
+        for (File file : files) {
+            try (FileReader fr = new FileReader(file) ; BufferedReader br = (new BufferedReader(fr))) {
+                while ((auxiliarUm = br.readLine()) != null) {
+                    arrayAuxiliar[0] = auxiliarUm + " - ";
+                    for (int i = 1; i < 6; i++) {
+                        arrayAuxiliar[i] = br.readLine().substring(4) + " - ";
+                    }
+                    arrayAuxiliar[6] = br.readLine().replaceAll("[^a-zA-Z]", "").trim();
+                    for (int i = 0; i < 6; i++) {
+                        auxiliarDois += arrayAuxiliar[i];
+                    }
+                    auxiliarDois += arrayAuxiliar[6].replaceAll("[^a-zA-Z]", "").trim();
+                }
+                System.out.println(auxiliarDois);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 }

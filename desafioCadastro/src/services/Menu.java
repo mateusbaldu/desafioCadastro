@@ -13,7 +13,7 @@ public class Menu {
         System.out.println("-----SISTEMA DE CADASTRO DE PETS-----");
         System.out.println("Digite uma opção: ");
         System.out.println("1. Cadastrar um novo pet\n" + "2. Listar pets por algum critério (idade, nome, raça)\n" +
-                "3. Alterar os dados do pet cadastrado\n" + "4. Listar todos os pets cadastrados\n" +
+                "3. Listar todos os pets cadastrados\n" + "4. Alterar os dados do pet cadastrado\n" +
                 "5. Deletar um pet cadastrado\n" + "6. Sair");
         System.out.print("Opção: ");
         int opcao = sc.nextInt();
@@ -28,6 +28,9 @@ public class Menu {
                 break;
             case 2:
                 chamarOpcaoDois();
+                break;
+            case 3:
+                TxtReader.listarTodosOsPets();
                 break;
         }
     }
@@ -86,6 +89,6 @@ public class Menu {
         System.out.print("Insira o segundo critério: ");
         String criterioPesquisaDois = sc.nextLine();
 
-        TxtReader.pesquisarPet(tipoPesquisa, criterioPesquisaUm, criterioPesquisaDois);
+        TxtReader.pesquisarPetPorCriterios(tipoPesquisa, criterioPesquisaUm, criterioPesquisaDois);
     }
 }
