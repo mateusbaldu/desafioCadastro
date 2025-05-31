@@ -2,10 +2,8 @@ package services;
 
 import models.Pet;
 
-import javax.swing.*;
 import java.io.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
@@ -60,67 +58,58 @@ public class TxtReader {
         File[] arquivosCadastro = pastaPetsCadastrados.listFiles();
         String[] arrayAuxiliar = new String[7];
         String regexVazia = "^\\s+$";
-        boolean possuiCriterioUm = !criterioPesquisaUm.matches(regexVazia);
-        boolean possuiCriterioDois = !criterioPesquisaDois.matches(regexVazia);
         String auxiliar = "";
-        String linha = "";
         boolean[] criterios = {true, true};
 
+        assert arquivosCadastro != null;
+        String linha = "";
         for (File arquivo : arquivosCadastro) {
            int contador = 1;
-           auxiliar = contador + " - ";
            try (BufferedReader br = new BufferedReader(new FileReader(arquivo))){
                while ((linha = br.readLine()) != null) {
-                   for (int i = 0; i < 7; i++) {
-                       arrayAuxiliar[i] = linha;
+                   arrayAuxiliar[0] = linha;
+                   for (int i = 1; i < 7; i++) {
+                       arrayAuxiliar[i] = br.readLine();
                    }
-                   if (!tipoPesquisa.equalsIgnoreCase(arrayAuxiliar[1].replaceAll("[^a-zA-Z]", ""))) {
-                       break;
-                   }
-               }
-           } catch (Exception e) {
-               e.printStackTrace();
-           }
-           try (BufferedReader br2 = new BufferedReader(new FileReader(arquivo))) {
-               while ((linha = br2.readLine()) != null) {
-                   if (!(possuiCriterioUm && possuiCriterioDois)) {
+                   if (!tipoPesquisa.equalsIgnoreCase(arrayAuxiliar[1].replaceAll("[^a-zA-Z]", "").trim())) {
+                       System.out.println("Tipo do animal vazio!");
                        break;
                    }
                    if (!criterioPesquisaUm.matches(regexVazia)) {
                        String[] auxUm = criterioPesquisaUm.split("-");
                        switch (auxUm[0].toLowerCase()) {
                            case "nome", "sobrenome":
-                               if (!auxUm[1].equals(arrayAuxiliar[0].replaceAll("[^a-zA-Z]", ""))) {
+                               if (!auxUm[1].equals(arrayAuxiliar[0].substring(4))) {
                                    criterios[0] = false;
                                }
                                break;
                            case "tipo":
-                               if (!auxUm[1].equals(arrayAuxiliar[1].replaceAll("[^a-zA-Z]", ""))) {
+                               if (!auxUm[1].equals(arrayAuxiliar[1].substring(4))) {
                                    criterios[0] = false;
                                }
                                break;
                            case "sexo":
-                               if (!auxUm[1].equals(arrayAuxiliar[2].replaceAll("[^a-zA-Z]", ""))) {
+                               if (!auxUm[1].equals(arrayAuxiliar[2].substring(4))) {
                                    criterios[0] = false;
                                }
                                break;
                            case "endereco":
-                               if (!auxUm[1].equals(arrayAuxiliar[3])) {
+                               if (!auxUm[1].equals(arrayAuxiliar[3].substring(4))) {
                                    criterios[0] = false;
                                }
                                break;
                            case "idade":
-                               if (!auxUm[1].equals(arrayAuxiliar[4])) {
+                               if (!auxUm[1].equals(arrayAuxiliar[4].substring(4))) {
                                    criterios[0] = false;
                                }
                                break;
                            case "peso":
-                               if (!auxUm[1].equals(arrayAuxiliar[5])) {
+                               if (!auxUm[1].equals(arrayAuxiliar[5].substring(4))) {
                                    criterios[0] = false;
                                }
                                break;
                            case "raca":
-                               if (!auxUm[1].equals(arrayAuxiliar[6])) {
+                               if (!auxUm[1].equals(arrayAuxiliar[6].substring(4))) {
                                    criterios[0] = false;
                                }
                                break;
@@ -134,37 +123,37 @@ public class TxtReader {
                        String[] auxDois = criterioPesquisaDois.split("-");
                        switch (auxDois[0].toLowerCase()) {
                            case "nome", "sobrenome":
-                               if (!auxDois[1].equals(arrayAuxiliar[0].replaceAll("[^a-zA-Z]", ""))) {
+                               if (!auxDois[1].equals(arrayAuxiliar[0].substring(4))) {
                                    criterios[1] = false;
                                }
                                break;
                            case "tipo":
-                               if (!auxDois[1].equals(arrayAuxiliar[1].replaceAll("[^a-zA-Z]", ""))) {
+                               if (!auxDois[1].equals(arrayAuxiliar[1].substring(4))) {
                                    criterios[1] = false;
                                }
                                break;
                            case "sexo":
-                               if (!auxDois[1].equals(arrayAuxiliar[2].replaceAll("[^a-zA-Z]", ""))) {
+                               if (!auxDois[1].equals(arrayAuxiliar[2].substring(4))) {
                                    criterios[1] = false;
                                }
                                break;
                            case "endereco":
-                               if (!auxDois[1].equals(arrayAuxiliar[3])) {
+                               if (!auxDois[1].equals(arrayAuxiliar[3].substring(4))) {
                                    criterios[1] = false;
                                }
                                break;
                            case "idade":
-                               if (!auxDois[1].equals(arrayAuxiliar[4])) {
+                               if (!auxDois[1].equals(arrayAuxiliar[4].substring(4))) {
                                    criterios[1] = false;
                                }
                                break;
                            case "peso":
-                               if (!auxDois[1].equals(arrayAuxiliar[5])) {
+                               if (!auxDois[1].equals(arrayAuxiliar[5].substring(4))) {
                                    criterios[1] = false;
                                }
                                break;
                            case "raca":
-                               if (!auxDois[1].equals(arrayAuxiliar[6])) {
+                               if (!auxDois[1].equals(arrayAuxiliar[6].substring(4))) {
                                    criterios[1] = false;
                                }
                                break;
@@ -175,8 +164,13 @@ public class TxtReader {
                        }
                    }
                    auxiliar += linha + " - ";
-                   System.out.println(auxiliar);
+                   for (int i = 1; i < 6; i++) {
+                       auxiliar += arrayAuxiliar[i].substring(4) + " - ";
+                   }
+                   auxiliar += arrayAuxiliar[6].substring(4);
                }
+               System.out.println(auxiliar);
+               contador++;
            } catch (Exception e) {
                e.printStackTrace();
            }

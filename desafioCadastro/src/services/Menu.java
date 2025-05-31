@@ -12,9 +12,9 @@ public class Menu {
         Scanner sc = new Scanner(System.in);
         System.out.println("-----SISTEMA DE CADASTRO DE PETS-----");
         System.out.println("Digite uma opção: ");
-        System.out.println("1. Cadastrar um novo pet\n" + "2. Alterar os dados do pet cadastrado\n" +
-                "3. Deletar um pet cadastrado\n" + "4. Listar todos os pets cadastrados\n" +
-                "5. Listar pets por algum critério (idade, nome, raça)\n" + "6. Sair");
+        System.out.println("1. Cadastrar um novo pet\n" + "2. Listar pets por algum critério (idade, nome, raça)\n" +
+                "3. Alterar os dados do pet cadastrado\n" + "4. Listar todos os pets cadastrados\n" +
+                "5. Deletar um pet cadastrado\n" + "6. Sair");
         System.out.print("Opção: ");
         int opcao = sc.nextInt();
         if (opcao <= 0 || opcao > 6) {
@@ -31,6 +31,7 @@ public class Menu {
                 break;
         }
     }
+
     public static void chamarOpcaoUm() {
         System.out.println("---CADASTRAR NOVO PET---");
         Pet pet = new Pet();
@@ -69,19 +70,17 @@ public class Menu {
         TxtReader.salvarPet(pet);
     }
 
-
     public static void chamarOpcaoDois() {
         Scanner sc = new Scanner(System.in);
         System.out.println("----PESQUISAR PET----");
-        System.out.println("Digite o tipo do pet (OBrigatorio): ");
+        System.out.println("Digite o tipo do pet (Obrigatorio): ");
         System.out.print("Cachorro ou Gato - ");
-        String tipoPesquisa = sc.nextLine().toUpperCase();
+        String tipoPesquisa = sc.nextLine().toLowerCase();
 
-        System.out.println("Insira critérios e as " +
-                "informaçoes que serão utilizadas para buscar o pet: ");
+        System.out.println("\n--Insira informaçoes que serão utilizadas para buscar o pet--");
         System.out.println("Importante! Digite-os separados somente por um traço!" +
                 " exemplo: Nome-Luiz");
-        System.out.println("Caso não deseje adicionar mais nenhum critério, aperte Space+Enter");
+        System.out.println("Caso não deseje adicionar, aperte Space+Enter");
         System.out.print("Insira o primeiro critério: ");
         String criterioPesquisaUm = sc.nextLine();
         System.out.print("Insira o segundo critério: ");
