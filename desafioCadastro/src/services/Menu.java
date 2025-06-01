@@ -25,12 +25,18 @@ public class Menu {
             case 1:
                 manipularFormulario();
                 chamarOpcaoUm();
+                chamarMenu();
                 break;
             case 2:
                 chamarOpcaoDois();
+                chamarMenu();
                 break;
             case 3:
                 TxtReader.listarTodosOsPets();
+                chamarMenu();
+                break;
+            case 4:
+                chamarOpcaoQuatro();
                 break;
         }
     }
@@ -61,10 +67,10 @@ public class Menu {
         endereco.setCidade(sc.nextLine());
         pet.setEndereco(endereco);
 
-        System.out.println("Idade em anos: ");
+        System.out.println("Idade em anos (x anos): ");
         pet.setIdade(sc.nextLine());
 
-        System.out.println("Peso em kilos: ");
+        System.out.println("Peso em kilos (xkg): ");
         pet.setPeso(sc.nextLine());
 
         System.out.println("Raça: ");
@@ -81,8 +87,7 @@ public class Menu {
         String tipoPesquisa = sc.nextLine().toLowerCase();
 
         System.out.println("\n--Insira informaçoes que serão utilizadas para buscar o pet--");
-        System.out.println("Importante! Digite-os separados somente por um traço!" +
-                " exemplo: Nome-Luiz");
+        System.out.println("Importante! Digite-os separados somente por um traço! Exemplo: Nome-Luiz");
         System.out.println("Caso não deseje adicionar, aperte Space+Enter");
         System.out.print("Insira o primeiro critério: ");
         String criterioPesquisaUm = sc.nextLine();
@@ -90,5 +95,25 @@ public class Menu {
         String criterioPesquisaDois = sc.nextLine();
 
         TxtReader.pesquisarPetPorCriterios(tipoPesquisa, criterioPesquisaUm, criterioPesquisaDois);
+    }
+
+    public static void chamarOpcaoQuatro() {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("---EDITAR DADOS DE PET---");
+        System.out.println("Digite o tipo do pet (Obrigatorio): ");
+        System.out.print("Cachorro ou Gato - ");
+        String tipoPesquisa = sc.nextLine().toLowerCase();
+
+        System.out.println("\nInsira informaçoes para esoclher um pet editável");
+        System.out.println("Importante! Digite separado por um traço! Exemplo: Nome-Luiz");
+        System.out.println("Caso não deseje adicionar, aperte Space+Enter");
+        System.out.print("Insira o primeiro critério: ");
+        String criterioPesquisaUm = sc.nextLine();
+        System.out.print("Insira o segundo critério: ");
+        String criterioPesquisaDois = sc.nextLine();
+
+        TxtReader.pesquisarPetPorNumero(tipoPesquisa, criterioPesquisaUm, criterioPesquisaDois);
+
+
     }
 }

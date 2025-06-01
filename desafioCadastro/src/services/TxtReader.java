@@ -6,6 +6,7 @@ import java.io.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Scanner;
 
 
 public class TxtReader {
@@ -170,7 +171,10 @@ public class TxtReader {
                    auxiliar += arrayAuxiliar[6].substring(4);
                }
                System.out.println(auxiliar);
-               contador++;
+               auxiliar = "";
+               for (int i = 0; i < 6; i++) {
+                   arrayAuxiliar[i] = "";
+               }
            } catch (Exception e) {
                e.printStackTrace();
            }
@@ -182,6 +186,7 @@ public class TxtReader {
         File[] files = pastaPetsCadastrados.listFiles();
         String[] arrayAuxiliar = new String[7];
         String auxiliarUm = "";
+        int contador = 1;
         String auxiliarDois = "";
         if (files == null) {
             System.out.println("Não existe nenhum pet cadastrado.");
@@ -190,7 +195,7 @@ public class TxtReader {
         for (File file : files) {
             try (FileReader fr = new FileReader(file) ; BufferedReader br = (new BufferedReader(fr))) {
                 while ((auxiliarUm = br.readLine()) != null) {
-                    arrayAuxiliar[0] = auxiliarUm + " - ";
+                    arrayAuxiliar[0] = contador + " - " + auxiliarUm.replaceAll("[^a-zA-Z\\s]", "") + " - ";
                     for (int i = 1; i < 6; i++) {
                         arrayAuxiliar[i] = br.readLine().substring(4) + " - ";
                     }
@@ -201,9 +206,19 @@ public class TxtReader {
                     auxiliarDois += arrayAuxiliar[6].replaceAll("[^a-zA-Z]", "").trim();
                 }
                 System.out.println(auxiliarDois);
+                for (int i = 0; i < 7; i++) {
+                    arrayAuxiliar[i] = "";
+                }
+                auxiliarDois = "";
+                auxiliarUm = "";
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
+            contador++;
         }
+    }
+
+    public static void pesquisarPetPorNumero(String tipoPesquisa, String criterioPesquisaUm,
+                                             String criterioPesquisaDois) {
     }
 }
