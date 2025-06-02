@@ -6,7 +6,6 @@ import java.io.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Scanner;
 
 
 public class TxtReader {
@@ -37,7 +36,7 @@ public class TxtReader {
                 pet.getNome().toUpperCase() + pet.getSobrenome().toUpperCase() + ".txt";
 
         File file = new File("C:\\Users\\samue\\OneDrive\\Documentos\\GitHub\\desafioCadastro\\desafioCadastro\\petsCadastrados", nomeDoArquivo);
-        try (FileWriter fr = new FileWriter(file) ; BufferedWriter bw = new BufferedWriter(fr)) {
+        try (FileWriter fr = new FileWriter(file); BufferedWriter bw = new BufferedWriter(fr)) {
             bw.write("1 - " + pet.getNome() + " " + pet.getSobrenome() + "\n");
             bw.write("2 - " + pet.getTipo() + "\n");
             bw.write("3 - " + pet.getSexo() + "\n");
@@ -54,163 +53,156 @@ public class TxtReader {
     }
 
     public static void pesquisarPetPorCriterios(String tipoPesquisa, String criterioPesquisaUm,
-                                    String criterioPesquisaDois) {
+                                                String criterioPesquisaDois) {
         File pastaPetsCadastrados = new File("petsCadastrados");
-        File[] arquivosCadastro = pastaPetsCadastrados.listFiles();
-        String[] arrayAuxiliar = new String[7];
-        String regexVazia = "^\\s+$";
-        String auxiliar = "";
-        boolean[] criterios = {true, true};
+        File[] petsTxt = pastaPetsCadastrados.listFiles();
+        String[] arrayAux = new String[7];
+        String regexVazia = "^\\s*$";
+        String petImpresso = "";
+        int petsEncontrados = 0;
 
-        assert arquivosCadastro != null;
+        if (petsTxt == null) {
+            System.out.println("Nenhum pet encontrado na pasta!");
+            return;
+        }
         String linha = "";
-        for (File arquivo : arquivosCadastro) {
-           int contador = 1;
-           try (BufferedReader br = new BufferedReader(new FileReader(arquivo))){
-               while ((linha = br.readLine()) != null) {
-                   arrayAuxiliar[0] = linha;
-                   for (int i = 1; i < 7; i++) {
-                       arrayAuxiliar[i] = br.readLine();
-                   }
-                   if (!tipoPesquisa.equalsIgnoreCase(arrayAuxiliar[1].replaceAll("[^a-zA-Z]", "").trim())) {
-                       System.out.println("Tipo do animal vazio!");
-                       break;
-                   }
-                   if (!criterioPesquisaUm.matches(regexVazia)) {
-                       String[] auxUm = criterioPesquisaUm.split("-");
-                       switch (auxUm[0].toLowerCase()) {
-                           case "nome", "sobrenome":
-                               if (!auxUm[1].equals(arrayAuxiliar[0].substring(4))) {
-                                   criterios[0] = false;
-                               }
-                               break;
-                           case "tipo":
-                               if (!auxUm[1].equals(arrayAuxiliar[1].substring(4))) {
-                                   criterios[0] = false;
-                               }
-                               break;
-                           case "sexo":
-                               if (!auxUm[1].equals(arrayAuxiliar[2].substring(4))) {
-                                   criterios[0] = false;
-                               }
-                               break;
-                           case "endereco":
-                               if (!auxUm[1].equals(arrayAuxiliar[3].substring(4))) {
-                                   criterios[0] = false;
-                               }
-                               break;
-                           case "idade":
-                               if (!auxUm[1].equals(arrayAuxiliar[4].substring(4))) {
-                                   criterios[0] = false;
-                               }
-                               break;
-                           case "peso":
-                               if (!auxUm[1].equals(arrayAuxiliar[5].substring(4))) {
-                                   criterios[0] = false;
-                               }
-                               break;
-                           case "raca":
-                               if (!auxUm[1].equals(arrayAuxiliar[6].substring(4))) {
-                                   criterios[0] = false;
-                               }
-                               break;
-                           default: break;
-                       }
-                       if (!criterios[0]) {
-                           break;
-                       }
-                   }
-                   if (!criterioPesquisaDois.matches(regexVazia)) {
-                       String[] auxDois = criterioPesquisaDois.split("-");
-                       switch (auxDois[0].toLowerCase()) {
-                           case "nome", "sobrenome":
-                               if (!auxDois[1].equals(arrayAuxiliar[0].substring(4))) {
-                                   criterios[1] = false;
-                               }
-                               break;
-                           case "tipo":
-                               if (!auxDois[1].equals(arrayAuxiliar[1].substring(4))) {
-                                   criterios[1] = false;
-                               }
-                               break;
-                           case "sexo":
-                               if (!auxDois[1].equals(arrayAuxiliar[2].substring(4))) {
-                                   criterios[1] = false;
-                               }
-                               break;
-                           case "endereco":
-                               if (!auxDois[1].equals(arrayAuxiliar[3].substring(4))) {
-                                   criterios[1] = false;
-                               }
-                               break;
-                           case "idade":
-                               if (!auxDois[1].equals(arrayAuxiliar[4].substring(4))) {
-                                   criterios[1] = false;
-                               }
-                               break;
-                           case "peso":
-                               if (!auxDois[1].equals(arrayAuxiliar[5].substring(4))) {
-                                   criterios[1] = false;
-                               }
-                               break;
-                           case "raca":
-                               if (!auxDois[1].equals(arrayAuxiliar[6].substring(4))) {
-                                   criterios[1] = false;
-                               }
-                               break;
-                           default: break;
-                       }
-                       if (!criterios[0]) {
-                           break;
-                       }
-                   }
-                   auxiliar += linha + " - ";
-                   for (int i = 1; i < 6; i++) {
-                       auxiliar += arrayAuxiliar[i].substring(4) + " - ";
-                   }
-                   auxiliar += arrayAuxiliar[6].substring(4);
-               }
-               System.out.println(auxiliar);
-               auxiliar = "";
-               for (int i = 0; i < 6; i++) {
-                   arrayAuxiliar[i] = "";
-               }
-           } catch (Exception e) {
-               e.printStackTrace();
-           }
+        for (File arquivo : petsTxt) {
+            String nomePetLimpo = "";
+            petImpresso = "";
+
+            try (BufferedReader br = new BufferedReader(new FileReader(arquivo))) {
+                linha = br.readLine();
+                if (linha == null) {
+                    continue;
+                }
+                nomePetLimpo = linha.substring(linha.indexOf("- ") + 2).replaceAll("[^a-zA-Z0-9\\sÀ-ú]", "").trim();
+                arrayAux[0] = nomePetLimpo;
+                for (int i = 1; i < 7; i++) {
+                    arrayAux[i] = br.readLine();
+                }
+                String tipoPetNoArquivo = arrayAux[1].substring(arrayAux[1].indexOf("- ") + 2).trim();
+                if (!tipoPesquisa.equalsIgnoreCase(tipoPetNoArquivo)) {
+                    continue;
+                }
+
+                if (!criterioPesquisaUm.matches(regexVazia)) {
+                    String[] auxUm = criterioPesquisaUm.split("-", 2);
+                    String chaveUm = auxUm[0].toLowerCase().trim();
+                    String valorUm = auxUm[1].trim();
+                    boolean criterioUmAtendidoSwitch = true;
+                    switch (chaveUm) {
+                        case "nome": case "sobrenome":
+                            if (!valorUm.equalsIgnoreCase(arrayAux[0])) criterioUmAtendidoSwitch = false;
+                            break;
+                        case "tipo":
+                            if (!valorUm.equalsIgnoreCase(arrayAux[1].substring(arrayAux[1].indexOf("- ") + 2).trim())) criterioUmAtendidoSwitch = false;
+                            break;
+                        case "sexo":
+                            if (!valorUm.equalsIgnoreCase(arrayAux[2].substring(arrayAux[2].indexOf("- ") + 2).trim())) criterioUmAtendidoSwitch = false;
+                            break;
+                        case "endereco":
+                            if (!valorUm.equalsIgnoreCase(arrayAux[3].substring(arrayAux[3].indexOf("- ") + 2).trim())) criterioUmAtendidoSwitch = false;
+                            break;
+                        case "idade":
+                            if (!valorUm.equalsIgnoreCase(arrayAux[4].substring(arrayAux[4].indexOf("- ") + 2).trim())) criterioUmAtendidoSwitch = false;
+                            break;
+                        case "peso":
+                            if (!valorUm.equalsIgnoreCase(arrayAux[5].substring(arrayAux[5].indexOf("- ") + 2).trim())) criterioUmAtendidoSwitch = false;
+                            break;
+                        case "raca":
+                            if (!valorUm.equalsIgnoreCase(arrayAux[6].substring(arrayAux[6].indexOf("- ") + 2).trim())) criterioUmAtendidoSwitch = false;
+                            break;
+                        default:
+                            break;
+                    }
+                    if (!criterioUmAtendidoSwitch) {
+                        continue;
+                    }
+                }
+
+                if (!criterioPesquisaDois.matches(regexVazia)) {
+                    String[] auxDois = criterioPesquisaDois.split("-", 2);
+                    String chaveDois = auxDois[0].toLowerCase().trim();
+                    String valorDois = auxDois[1].trim();
+
+                    boolean criterioDoisAtendidoSwitch = true;
+                    switch (chaveDois) {
+                        case "nome": case "sobrenome":
+                            if (!valorDois.equalsIgnoreCase(arrayAux[0])) criterioDoisAtendidoSwitch = false;
+                            break;
+                        case "tipo":
+                            if (!valorDois.equalsIgnoreCase(arrayAux[1].substring(arrayAux[1].indexOf("- ") + 2).trim())) criterioDoisAtendidoSwitch = false;
+                            break;
+                        case "sexo":
+                            if (!valorDois.equalsIgnoreCase(arrayAux[2].substring(arrayAux[2].indexOf("- ") + 2).trim())) criterioDoisAtendidoSwitch = false;
+                            break;
+                        case "endereco":
+                            if (!valorDois.equalsIgnoreCase(arrayAux[3].substring(arrayAux[3].indexOf("- ") + 2).trim())) criterioDoisAtendidoSwitch = false;
+                            break;
+                        case "idade":
+                            if (!valorDois.equalsIgnoreCase(arrayAux[4].substring(arrayAux[4].indexOf("- ") + 2).trim())) criterioDoisAtendidoSwitch = false;
+                            break;
+                        case "peso":
+                            if (!valorDois.equalsIgnoreCase(arrayAux[5].substring(arrayAux[5].indexOf("- ") + 2).trim())) criterioDoisAtendidoSwitch = false;
+                            break;
+                        case "raca":
+                            if (!valorDois.equalsIgnoreCase(arrayAux[6].substring(arrayAux[6].indexOf("- ") + 2).trim())) criterioDoisAtendidoSwitch = false;
+                            break;
+                        default:
+                            break;
+                    }
+                    if (!criterioDoisAtendidoSwitch) {
+                        continue;
+                    }
+                }
+                petsEncontrados++;
+                petImpresso = petsEncontrados + " - " + arrayAux[0];
+                for (int i = 1; i < 7; i++) {
+                    petImpresso += " - " + arrayAux[i].substring(arrayAux[i].indexOf("- ") + 2).trim();
+                }
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+            if (!petImpresso.isEmpty()) {
+                System.out.println(petImpresso);
+            }
+            for (int i = 0; i < 7; i++) {
+                arrayAux[i] = "";
+            }
         }
     }
 
     public static void listarTodosOsPets() {
         File pastaPetsCadastrados = new File("petsCadastrados");
-        File[] files = pastaPetsCadastrados.listFiles();
-        String[] arrayAuxiliar = new String[7];
-        String auxiliarUm = "";
+        File[] petsTxt = pastaPetsCadastrados.listFiles();
+        String[] arrayAux = new String[7];
+        String petImpresso = "";
         int contador = 1;
-        String auxiliarDois = "";
-        if (files == null) {
+        String aux = "";
+        if (petsTxt == null) {
             System.out.println("Não existe nenhum pet cadastrado.");
             return;
         }
-        for (File file : files) {
-            try (FileReader fr = new FileReader(file) ; BufferedReader br = (new BufferedReader(fr))) {
-                while ((auxiliarUm = br.readLine()) != null) {
-                    arrayAuxiliar[0] = contador + " - " + auxiliarUm.replaceAll("[^a-zA-Z\\s]", "") + " - ";
+        for (File file : petsTxt) {
+            try (FileReader fr = new FileReader(file); BufferedReader br = (new BufferedReader(fr))) {
+                while ((petImpresso = br.readLine()) != null) {
+                    arrayAux[0] = contador + " - " + petImpresso.replaceAll("[^a-zA-Z\\s]", "") + " - ";
                     for (int i = 1; i < 6; i++) {
-                        arrayAuxiliar[i] = br.readLine().substring(4) + " - ";
+                        arrayAux[i] = br.readLine().substring(4) + " - ";
                     }
-                    arrayAuxiliar[6] = br.readLine().replaceAll("[^a-zA-Z]", "").trim();
+                    arrayAux[6] = br.readLine().replaceAll("[^a-zA-Z]", "").trim();
                     for (int i = 0; i < 6; i++) {
-                        auxiliarDois += arrayAuxiliar[i];
+                        aux += arrayAux[i];
                     }
-                    auxiliarDois += arrayAuxiliar[6].replaceAll("[^a-zA-Z]", "").trim();
+                    aux += arrayAux[6].replaceAll("[^a-zA-Z]", "").trim();
                 }
-                System.out.println(auxiliarDois);
+                System.out.println(aux);
                 for (int i = 0; i < 7; i++) {
-                    arrayAuxiliar[i] = "";
+                    arrayAux[i] = "";
                 }
-                auxiliarDois = "";
-                auxiliarUm = "";
+                aux = "";
+                petImpresso = "";
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
