@@ -38,6 +38,16 @@ public class Menu {
                 break;
             case 4:
                 chamarOpcaoQuatro();
+                chamarMenu();
+                break;
+            case 5:
+                chamarOpcaoCinco();
+                chamarMenu();
+                break;
+            case 6:
+                System.out.println("Encerrando o sistema...");
+                break;
+            default:
                 break;
         }
     }
@@ -48,33 +58,33 @@ public class Menu {
         Endereco endereco = new Endereco();
         Scanner sc = new Scanner(System.in);
 
-        System.out.println("Nome: ");
+        System.out.print("Nome: ");
         pet.setNome(sc.nextLine());
 
-        System.out.println("Sobrenome: ");
+        System.out.print("Sobrenome: ");
         pet.setSobrenome(sc.nextLine());
 
-        System.out.println("Tipo: ");
+        System.out.print("Tipo: ");
         pet.setTipo(sc.nextLine());
 
-        System.out.println("Sexo: ");
+        System.out.print("Sexo: ");
         pet.setSexo(sc.nextLine());
 
-        System.out.println("Logradouro: ");
+        System.out.print("Logradouro: ");
         endereco.setRua(sc.nextLine());
-        System.out.println("Numero: ");
+        System.out.print("Numero: ");
         endereco.setNumeroCasa(sc.nextLine());
-        System.out.println("Cidade:");
+        System.out.print("Cidade:");
         endereco.setCidade(sc.nextLine());
         pet.setEndereco(endereco);
 
-        System.out.println("Idade em anos (x anos): ");
+        System.out.print("Idade em anos (x anos): ");
         pet.setIdade(sc.nextLine());
 
-        System.out.println("Peso em kilos (xkg): ");
+        System.out.print("Peso em kilos (xkg): ");
         pet.setPeso(sc.nextLine());
 
-        System.out.println("Raça: ");
+        System.out.print("Raça: ");
         pet.setRaca(sc.nextLine());
 
         TxtController.salvarPet(pet);
@@ -86,6 +96,10 @@ public class Menu {
         System.out.println("Digite o tipo do pet (Obrigatorio): ");
         System.out.print("Cachorro ou Gato - ");
         String tipoPesquisa = sc.nextLine().toLowerCase();
+        if (tipoPesquisa.isEmpty() || tipoPesquisa.equals(" ")) {
+            System.out.println("Tipo do pet não inserido! Tente novamente");
+            chamarOpcaoDois();
+        }
 
         System.out.println("\n--Insira informaçoes que serão utilizadas para buscar o pet--");
         System.out.println("Importante! Digite-os separados somente por um traço! Exemplo: Nome-Luiz");
@@ -104,6 +118,10 @@ public class Menu {
         System.out.println("Digite o tipo do pet (Obrigatorio): ");
         System.out.print("Cachorro ou Gato - ");
         String tipoPesquisa = sc.nextLine().toLowerCase();
+        if (tipoPesquisa.isEmpty() || tipoPesquisa.equals(" ")) {
+            System.out.println("Tipo do pet não inserido! Tente novamente");
+            chamarOpcaoQuatro();
+        }
 
         System.out.println("\nInsira informaçoes para esoclher um pet editável");
         System.out.println("Importante! Digite separado por um traço! Exemplo: Nome-Luiz");
@@ -119,5 +137,32 @@ public class Menu {
             chamarMenu();
         }
         TxtController.editarPets(apoio);
+    }
+
+    public static void chamarOpcaoCinco() {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("---DELETAR UM PET---");
+        System.out.println("Digite o tipo do pet (Obrigatorio): ");
+        System.out.print("Cachorro ou Gato - ");
+        String tipoPesquisa = sc.nextLine().toLowerCase();
+        if (tipoPesquisa.isEmpty() || tipoPesquisa.equals(" ")) {
+            System.out.println("Tipo do pet não inserido! Tente novamente");
+            chamarOpcaoQuatro();
+        }
+
+        System.out.println("\nInsira informaçoes para escolher um pet deletavel");
+        System.out.println("Importante! Digite separado por um traço! Exemplo: Nome-Luiz");
+        System.out.println("Caso não deseje adicionar, aperte Space+Enter");
+        System.out.print("Insira o primeiro critério: ");
+        String criterioPesquisaUm = sc.nextLine();
+        System.out.print("Insira o segundo critério: ");
+        String criterioPesquisaDois = sc.nextLine();
+
+        File[] apoio = pesquisarPetPorNumero(tipoPesquisa, criterioPesquisaUm, criterioPesquisaDois);
+        if (apoio == null) {
+            System.out.println("Nenhum pet encontrado! Tente novamente");
+            chamarMenu();
+        }
+        TxtController.deletarPets(apoio);
     }
 }

@@ -47,7 +47,7 @@ public class TxtController {
             bw.write("6 - " + pet.getPeso() + "\n");
             bw.write("7 - " + pet.getRaca() + "\n");
 
-            System.out.println("Cadastrado com sucesso!");
+            System.out.println("Cadastrado com sucesso!\n");
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -67,6 +67,8 @@ public class TxtController {
             return;
         }
         String linha = "";
+
+        System.out.println("Pets encontrados:");
         for (File arquivo : petsTxt) {
             String nomePetLimpo = "";
             petImpresso = "";
@@ -227,6 +229,8 @@ public class TxtController {
             return null;
         }
         String linha = "";
+
+        System.out.println("Pets encontrados:");
         for (File arquivo : petsTxt) {
             String nomePetLimpo = "";
             petImpresso = "";
@@ -326,6 +330,7 @@ public class TxtController {
                 e.printStackTrace();
             }
             if (!petImpresso.isEmpty()) {
+                petsParaEdicao[countPetsParaEdicao] = arquivo;
                 countPetsParaEdicao++;
                 System.out.println(petImpresso);
             }
@@ -333,7 +338,6 @@ public class TxtController {
             for (int i = 0; i < 7; i++) {
                 arrayAux[i] = "";
             }
-            petsParaEdicao[countPetsParaEdicao] = arquivo;
         }
         return petsParaEdicao;
     }
@@ -341,10 +345,62 @@ public class TxtController {
     public static void editarPets(File[] petsParaEdicao) {
         Scanner sc = new Scanner(System.in);
         System.out.println("Digite o numero do pet que deseja editar: ");
-        int numeroPet = sc.nextInt();
-        File petParaEditar = petsParaEdicao[numeroPet - 1];
-        String aux = "";
+        int numeroPet = sc.nextInt() - 1;
+        File petParaEditar = petsParaEdicao[numeroPet];
+        String[] aux = new String[7];
+        int countLine = 0;
+        String auxLine = "";
+        String petFinalizado = "";
 
-        System.out.println(petParaEditar.getAbsolutePath());
+        System.out.println("\n------------------------------------------------");
+        try (FileReader fr = new FileReader(petParaEditar); BufferedReader br = new BufferedReader(fr)) {
+            System.out.println("Digite o numero da linha que deseja alterar: ");
+            System.out.println("Importante! Tipo(2) e Sexo(3) não podem ser alterados!");
+            while ((auxLine = br.readLine()) != null) {
+                System.out.println(auxLine);
+                aux[countLine] = auxLine;
+                countLine++;
+            }
+            int linhaASerAlterada = sc.nextInt();
+            sc.nextLine();
+
+            if (linhaASerAlterada == 2 || linhaASerAlterada == 3) {
+                System.out.println("Essas linhas não podem ser alteradas! Reiniciando opção...");
+                editarPets(petsParaEdicao);
+            }
+            System.out.println("Digite a nova alteração:");
+            String alteracao = sc.nextLine();
+            aux[linhaASerAlterada - 1] = linhaASerAlterada + " - " + alteracao;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try (FileWriter fw = new FileWriter(petParaEditar, false); BufferedWriter bw = new BufferedWriter(fw)) {
+            for (int i = 0; i < 7; i++) {
+                bw.write(aux[i]);
+                bw.newLine();
+            }
+            System.out.println("Alteração feita com sucesso!");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void deletarPets(File[] petsParaEdicao) {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Digite o número do pet que deseja deletar:");
+        int numeroPet = sc.nextInt() - 1;
+        sc.nextLine();
+        File petParaDeletar = petsParaEdicao[numeroPet];
+
+        System.out.println("Voc6e tem certeza que deseja excluir esse pet? (Sim/Nao):");
+        String confirmacao = sc.nextLine();
+
+        if (confirmacao.equalsIgnoreCase("Sim")) {
+            petParaDeletar.delete();
+            System.out.println("Pet deletado com sucesso!");
+        } else {
+            System.out.println("Operação cancelada.");
+        }
     }
 }

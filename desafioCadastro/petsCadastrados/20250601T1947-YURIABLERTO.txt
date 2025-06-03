@@ -1,7 +1,7 @@
 1 - Yuri Ablerto
 2 - GATO
 3 - MACHO
-4 - rua ficticia, 90, Sao Paulo
+4 - Rua ficticia, 90, Sao Paulo
 5 - 10 anos
 6 - 3kg
 7 - ViraLata
