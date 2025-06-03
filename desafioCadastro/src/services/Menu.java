@@ -3,12 +3,13 @@ package services;
 import models.Endereco;
 import models.Pet;
 
+import java.io.File;
 import java.util.Scanner;
 
-import static services.TxtReader.manipularFormulario;
+import static services.TxtController.*;
 
 public class Menu {
-    public void chamarMenu() {
+    public static void chamarMenu() {
         Scanner sc = new Scanner(System.in);
         System.out.println("-----SISTEMA DE CADASTRO DE PETS-----");
         System.out.println("Digite uma opção: ");
@@ -32,7 +33,7 @@ public class Menu {
                 chamarMenu();
                 break;
             case 3:
-                TxtReader.listarTodosOsPets();
+                TxtController.listarTodosOsPets();
                 chamarMenu();
                 break;
             case 4:
@@ -76,7 +77,7 @@ public class Menu {
         System.out.println("Raça: ");
         pet.setRaca(sc.nextLine());
 
-        TxtReader.salvarPet(pet);
+        TxtController.salvarPet(pet);
     }
 
     public static void chamarOpcaoDois() {
@@ -94,7 +95,7 @@ public class Menu {
         System.out.print("Insira o segundo critério: ");
         String criterioPesquisaDois = sc.nextLine();
 
-        TxtReader.pesquisarPetPorCriterios(tipoPesquisa, criterioPesquisaUm, criterioPesquisaDois);
+        TxtController.pesquisarPetPorCriterios(tipoPesquisa, criterioPesquisaUm, criterioPesquisaDois);
     }
 
     public static void chamarOpcaoQuatro() {
@@ -112,8 +113,11 @@ public class Menu {
         System.out.print("Insira o segundo critério: ");
         String criterioPesquisaDois = sc.nextLine();
 
-        TxtReader.pesquisarPetPorNumero(tipoPesquisa, criterioPesquisaUm, criterioPesquisaDois);
-
-
+        File[] apoio = pesquisarPetPorNumero(tipoPesquisa, criterioPesquisaUm, criterioPesquisaDois);
+        if (apoio == null) {
+            System.out.println("Nenhum pet encontrado! Tente novamente");
+            chamarMenu();
+        }
+        TxtController.editarPets(apoio);
     }
 }
